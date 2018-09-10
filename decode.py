@@ -26,6 +26,7 @@ import pyrouge
 import util
 import logging
 import numpy as np
+from IPython import embed
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -101,7 +102,7 @@ class BeamSearchDecoder(object):
       # Extract the output ids from the hypothesis and convert back to words
       output_ids = [int(t) for t in best_hyp.tokens[1:]]
       decoded_words = data.outputids2words(output_ids, self._vocab, (batch.art_oovs[0] if FLAGS.pointer_gen else None))
-
+      #embed()
       # Remove the [STOP] token from decoded_words, if necessary
       try:
         fst_stop_idx = decoded_words.index(data.STOP_DECODING) # index of the (first) [STOP] symbol
@@ -193,8 +194,11 @@ def print_results(article, abstract, decoded_output):
   """Prints the article, the reference summmary and the decoded summary to screen"""
   print("---------------------------------------------------------------------------")
   tf.logging.info('ARTICLE:  %s', article)
+  print('ARTICLE: {}'.format(article))
   tf.logging.info('REFERENCE SUMMARY: %s', abstract)
+  print('REFERENCE SUMMARY: {}'.format(abstract))
   tf.logging.info('GENERATED SUMMARY: %s', decoded_output)
+  print('GENERATED SUMMARY: {}'.format(decoded_output))
   print("---------------------------------------------------------------------------")
 
 

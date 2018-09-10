@@ -29,11 +29,16 @@ from decode import BeamSearchDecoder
 import util
 from tensorflow.python import debug as tf_debug
 
+from IPython import embed
+
 FLAGS = tf.app.flags.FLAGS
+
+#os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
 
 # Where to find data
 tf.app.flags.DEFINE_string('data_path', '', 'Path expression to tf.Example datafiles. Can include wildcards to access multiple datafiles.')
 tf.app.flags.DEFINE_string('vocab_path', '', 'Path expression to text vocabulary file.')
+tf.app.flags.DEFINE_string('emb_path', '', 'Path expression to text vocabulary file.')
 
 # Important settings
 tf.app.flags.DEFINE_string('mode', 'train', 'must be one of train/eval/decode')
@@ -98,12 +103,14 @@ def calc_running_avg_loss(loss, running_avg_loss, summary_writer, step, decay=0.
   loss_sum.value.add(tag=tag_name, simple_value=running_avg_loss)
   summary_writer.add_summary(loss_sum, step)
   tf.logging.info('running_avg_loss: %f', running_avg_loss)
+  print('running_avg_loss: %f', running_avg_loss)
   return running_avg_loss
 
 
 def restore_best_model():
   """Load bestmodel file from eval directory, add variables for adagrad, and save to train directory"""
   tf.logging.info("Restoring bestmodel for training...")
+  print("Restoring bestmodel for training...")
 
   # Initialize all vars in the model
   sess = tf.Session(config=util.get_config())
@@ -129,6 +136,7 @@ def restore_best_model():
 def convert_to_coverage_model():
   """Load non-coverage checkpoint, add initialized extra variables for coverage, and save as new checkpoint"""
   tf.logging.info("converting non-coverage model to coverage model..")
+  print("converting non-coverage model to coverage model..")
 
   # initialize an entire coverage model from scratch
   sess = tf.Session(config=util.get_config())
@@ -172,33 +180,44 @@ def setup_training(model, batcher):
                      global_step=model.global_step)
   summary_writer = sv.summary_writer
   tf.logging.info("Preparing or waiting for session...")
+  print("Preparing or waiting for session...")
   sess_context_manager = sv.prepare_or_wait_for_session(config=util.get_config())
   tf.logging.info("Created session.")
+  print("Created session.")
   try:
     run_training(model, batcher, sess_context_manager, sv, summary_writer) # this is an infinite loop until interrupted
   except KeyboardInterrupt:
     tf.logging.info("Caught keyboard interrupt on worker. Stopping supervisor...")
+    print("Caught keyboard interrupt on worker. Stopping supervisor...")
     sv.stop()
 
 
 def run_training(model, batcher, sess_context_manager, sv, summary_writer):
   """Repeatedly runs training iterations, logging loss to screen and writing summaries"""
   tf.logging.info("starting run_training")
+  print("starting run_training")
+  #embed()
+  #print("starting training")
   with sess_context_manager as sess:
     if FLAGS.debug: # start the tensorflow debugger
       sess = tf_debug.LocalCLIDebugWrapperSession(sess)
       sess.add_tensor_filter("has_inf_or_nan", tf_debug.has_inf_or_nan)
+    step_count = 0
     while True: # repeats until interrupted
+      step_count += 1
       batch = batcher.next_batch()
-
+      #embed()
       tf.logging.info('running training step...')
+      print('running training step {}...'.format(step_count))
       t0=time.time()
       results = model.run_train_step(sess, batch)
       t1=time.time()
       tf.logging.info('seconds for training step: %.3f', t1-t0)
+      print('seconds for training step: %.3f', t1-t0)
 
       loss = results['loss']
       tf.logging.info('loss: %f', loss) # print the loss to screen
+      print('loss: %f', loss) # print the loss to screen
 
       if not np.isfinite(loss):
         raise Exception("Loss is not finite. Stopping.")
@@ -206,6 +225,7 @@ def run_training(model, batcher, sess_context_manager, sv, summary_writer):
       if FLAGS.coverage:
         coverage_loss = results['coverage_loss']
         tf.logging.info("coverage_loss: %f", coverage_loss) # print the coverage loss to screen
+        print("coverage_loss: %f", coverage_loss) # print the coverage loss to screen
 
       # get the summaries and iteration number so we can write summaries to tensorboard
       summaries = results['summaries'] # we will write these summaries to tensorboard using summary_writer
@@ -236,13 +256,16 @@ def run_eval(model, batcher, vocab):
     results = model.run_eval_step(sess, batch)
     t1=time.time()
     tf.logging.info('seconds for batch: %.2f', t1-t0)
+    print('seconds for batch: %.2f', t1-t0)
 
     # print the loss and coverage loss to screen
     loss = results['loss']
     tf.logging.info('loss: %f', loss)
+    print('loss: %f', loss)
     if FLAGS.coverage:
       coverage_loss = results['coverage_loss']
       tf.logging.info("coverage_loss: %f", coverage_loss)
+      print("coverage_loss: %f", coverage_loss)
 
     # add summaries
     summaries = results['summaries']
@@ -256,6 +279,7 @@ def run_eval(model, batcher, vocab):
     # These checkpoints will appear as bestmodel-<iteration_number> in the eval dir
     if best_loss is None or running_avg_loss < best_loss:
       tf.logging.info('Found new best model with %.3f running_avg_loss. Saving to %s', running_avg_loss, bestmodel_save_path)
+      print('Found new best model with %.3f running_avg_loss. Saving to %s', running_avg_loss, bestmodel_save_path)
       saver.save(sess, bestmodel_save_path, global_step=train_step, latest_filename='checkpoint_best')
       best_loss = running_avg_loss
 
@@ -270,6 +294,7 @@ def main(unused_argv):
 
   tf.logging.set_verbosity(tf.logging.INFO) # choose what level of logging you want
   tf.logging.info('Starting seq2seq_attention in %s mode...', (FLAGS.mode))
+  print('Starting seq2seq_attention in %s mode...', (FLAGS.mode))
 
   # Change log_root to FLAGS.log_root/FLAGS.exp_name and create the dir if necessary
   FLAGS.log_root = os.path.join(FLAGS.log_root, FLAGS.exp_name)
@@ -304,14 +329,14 @@ def main(unused_argv):
 
   tf.set_random_seed(111) # a seed value for randomness
 
-  if hps.mode == 'train':
+  if hps.mode.value == 'train':
     print("creating model...")
     model = SummarizationModel(hps, vocab)
     setup_training(model, batcher)
-  elif hps.mode == 'eval':
+  elif hps.mode.value == 'eval':
     model = SummarizationModel(hps, vocab)
     run_eval(model, batcher, vocab)
-  elif hps.mode == 'decode':
+  elif hps.mode.value == 'decode':
     decode_model_hps = hps  # This will be the hyperparameters for the decoder model
     decode_model_hps = hps._replace(max_dec_steps=1) # The model is configured with max_dec_steps=1 because we only ever run one step of the decoder at a time (to do beam search). Note that the batcher is initialized with max_dec_steps equal to e.g. 100 because the batches need to contain the full summaries
     model = SummarizationModel(decode_model_hps, vocab)
