@@ -104,7 +104,7 @@ python run_summarization.py --mode=train --data_path=../data/ensemble/formatted_
 
 This will create a subdirectory of your specified `log_root` called `myexperiment` where all checkpoints and other data will be saved. Then the model will start training using the `train_*.bin` files as training data.
 
-Note: To use ordered data, simply replace `formatted_examples_uncased_unordered` data with `formatted_examples_uncased_ordered` in the data_path
+Note: To use ordered data, simply replace `formatted_examples_uncased_unordered` data with `formatted_examples_uncased_ordered` in the `--data_path`.
 
 **Warning**: Using default settings as in the above command, both initializing the model and running training iterations will probably be quite slow. To make things faster, try setting the following flags (especially `max_enc_steps` and `max_dec_steps`) to something smaller than the defaults specified in `run_summarization.py`: `hidden_dim`, `emb_dim`, `batch_size`, `max_enc_steps`, `max_dec_steps`, `vocab_size`. 
 
