@@ -43,47 +43,12 @@ Once on the instance, run the following:
 cd paraphrasing/pointer-generator # move into the repo
 source activate tensorflow_p36 # activate the optimized tensorflow environment using python 3.6
 ```
-## Screen versus running in background
-For whatever reason, I noticed that running in background produces weird stopping behavior. If the connection to the server breaks, for instance, often the training will also break. It's possible the behavior I noticed was do to something else and feel free to run in background with `$ <command> &` but my recommendation is to use `screen`.
-
-### Starting a screen
-To start a screen simply run `screen`.
-
-From here you must reactivate the tensorflow environment with `source activate tensorflow_p36`.
-
-Now, you may run any commands that you would run normally and can furthermore run commands in the background (for instance if you simply want to write the output to file).
-
-### Exiting from screen
-There are two ways to exit from a running `screen`. The first way, and primary way, is to ~detach~ from the screen by simply pressing Control-A-D 
-
-## Looking for test set output?
-The test set output of the models described in the paper can be found [here](https://drive.google.com/file/d/0B7pQmm-OfDv7MEtMVU5sOHc5LTg/view?usp=sharing).
-
-## Looking for pretrained model?
-A pretrained model is available here:
-* [Version for Tensorflow 1.0](https://drive.google.com/file/d/0B7pQmm-OfDv7SHFadHR4RllfR1E/view?usp=sharing)
-* [Version for Tensorflow 1.2.1](https://drive.google.com/file/d/0B7pQmm-OfDv7ZUhHZm9ZWEZidDg/view?usp=sharing)
-
-(The only difference between these two is the naming of some of the variables in the checkpoint. Tensorflow 1.0 uses `lstm_cell/biases` and `lstm_cell/weights` whereas Tensorflow 1.2.1 uses `lstm_cell/bias` and `lstm_cell/kernel`).
-
-## Looking for CNN / Daily Mail data?
-Instructions are [here](https://github.com/abisee/cnn-dailymail).
-
-## About this code
-This code is based on the [TextSum code](https://github.com/tensorflow/models/tree/master/textsum) from Google Brain.
-
-This code was developed for Tensorflow 0.12, but has been updated to run with Tensorflow 1.0.
-In particular, the code in attention_decoder.py is based on [tf.contrib.legacy_seq2seq_attention_decoder](https://www.tensorflow.org/api_docs/python/tf/contrib/legacy_seq2seq/attention_decoder), which is now outdated.
-Tensorflow 1.0's [new seq2seq library](https://www.tensorflow.org/api_guides/python/contrib.seq2seq#Attention) probably provides a way to do this (as well as beam search) more elegantly and efficiently in the future.
+## File structure
 
 ## How to run
+See notes on using `screen` towards the end of the README.
 
-### Get the dataset
-To obtain the CNN / Daily Mail dataset, follow the instructions [here](https://github.com/abisee/cnn-dailymail). Once finished, you should have [chunked](https://github.com/abisee/cnn-dailymail/issues/3) datafiles `train_000.bin`, ..., `train_287.bin`, `val_000.bin`, ..., `val_013.bin`, `test_000.bin`, ..., `test_011.bin` (each contains 1000 examples) and a vocabulary file `vocab`.
-
-**Note**: If you did this before 7th May 2017, follow the instructions [here](https://github.com/abisee/cnn-dailymail/issues/2) to correct a bug in the process.
-
-### Run training
+### Training the model
 To train your model, run:
 
 ```
@@ -140,3 +105,25 @@ For reasons that are [difficult to diagnose](https://github.com/abisee/pointer-g
 * The training job is set to keep 3 checkpoints at any one time (see the `max_to_keep` variable in `run_summarization.py`). If your newer checkpoint is corrupted, it may be that one of the older ones is not. You can switch to that checkpoint by editing the `checkpoint` file inside the `train` directory.
 * Alternatively, you can restore a "best model" from the `eval` directory. See the note **Restoring snapshots** above.
 * If you want to try to diagnose the cause of the NaNs, you can run with the `--debug=1` flag turned on. This will run [Tensorflow Debugger](https://www.tensorflow.org/versions/master/programmers_guide/debugger), which checks for NaNs and diagnoses their causes during training.
+
+## Screen versus running in background
+For whatever reason, I noticed that running in background produces weird stopping behavior. If the connection to the server breaks, for instance, often the training will also break. It's possible the behavior I noticed was do to something else and feel free to run in background with `$ <command> &` but my recommendation is to use `screen`.
+
+### Starting a screen
+To start a screen simply run `screen`.
+
+From here you must reactivate the tensorflow environment with `source activate tensorflow_p36`.
+
+Now, you may run any commands that you would run normally and can furthermore run commands in the background (for instance if you simply want to write the output to file).
+
+### Exiting from screen
+There are two ways to exit from a running screen. The first way, and primary way, is to *detach* from the screen by simply pressing _Control-A-D_. This will leave the detached screen running in the background. It can be accessed by running `screen -r`. If multiple screens are running, `screen -r` will prompt you to select one of them.
+
+The second way, is to *terminate* a screen. This should only be done if you are no longer running anything on the screen. To terminate a screen that you are currently on, simply press _Control-C_. This will irreversible end the given screen session and return you to the main command line.
+
+## About this code
+This code is based on the [TextSum code](https://github.com/tensorflow/models/tree/master/textsum) from Google Brain.
+
+This code was developed for Tensorflow 0.12, but has been updated to run with Tensorflow 1.0.
+In particular, the code in attention_decoder.py is based on [tf.contrib.legacy_seq2seq_attention_decoder](https://www.tensorflow.org/api_docs/python/tf/contrib/legacy_seq2seq/attention_decoder), which is now outdated.
+Tensorflow 1.0's [new seq2seq library](https://www.tensorflow.org/api_guides/python/contrib.seq2seq#Attention) probably provides a way to do this (as well as beam search) more elegantly and efficiently in the future.
