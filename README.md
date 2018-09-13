@@ -38,15 +38,23 @@ ZeUE/7qodeZkuSYvGEZDwvyBC8le4xgR2EvrBwskTjbxHEu4uf7BB2N9T8opxRgM
 SEPo8upWuYchTJ/SCd6sT2/6CSJlnSttZbxTJ2fxrk3gzPM8V7GH+BY=
 -----END RSA PRIVATE KEY-----
 ```
-Once on the instance, move to the repo with `cd paraphrasing/pointer-generator`.
-
+Once on the instance, run the following:
+```
+cd paraphrasing/pointer-generator # move into the repo
+source activate tensorflow_p36 # activate the optimized tensorflow environment using python 3.6
+```
 ## Screen versus running in background
-For whatever reason, I noticed that running in background produces weird stopping behavior. If the connection to the server breaks, for instance, often the training will also break. It's possible the behavior I noticed was do to something else and feel free to run in background with `&` but my recommendation is to use `screen`.
+For whatever reason, I noticed that running in background produces weird stopping behavior. If the connection to the server breaks, for instance, often the training will also break. It's possible the behavior I noticed was do to something else and feel free to run in background with `$ <command> &` but my recommendation is to use `screen`.
 
 ### Starting a screen
 To start a screen simply run `screen`.
 
-From here you must reactivate
+From here you must reactivate the tensorflow environment with `source activate tensorflow_p36`.
+
+Now, you may run any commands that you would run normally and can furthermore run commands in the background (for instance if you simply want to write the output to file).
+
+### Exiting from screen
+There are two ways to exit from a running `screen`. The first way, and primary way, is to ~detach~ from the screen by simply pressing Control-A-D 
 
 ## Looking for test set output?
 The test set output of the models described in the paper can be found [here](https://drive.google.com/file/d/0B7pQmm-OfDv7MEtMVU5sOHc5LTg/view?usp=sharing).
