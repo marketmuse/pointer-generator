@@ -101,7 +101,8 @@ python run_summarization.py \
       --log_root=/path/to/a/log/directory \
       --exp_name=myexperiment
 ```
-###### Using paths on the V100 instance as well as the Marketmuse word embeddings (change --exp_name from myexperiment to desired name)
+###### Using paths on the V100 instance as well as the Marketmuse word embeddings 
+Note: change `--exp_name=myexperiment` to desired experiment name
 ```
 python run_summarization.py \
       --mode=train \
@@ -212,9 +213,9 @@ From here you must reactivate the tensorflow environment with `source activate t
 Now, you may run any commands that you would run normally and can furthermore run commands in the background (for instance if you simply want to write the output to file).
 
 ### Exiting from screen
-There are two ways to exit from a running screen. The first way, and primary way, is to *detach* from the screen by simply pressing _Control-A-D_. This will leave the detached screen running in the background. It can be accessed by running `screen -r`. If multiple screens are running, `screen -r` will prompt you to select one of them.
+There are two ways to exit from a running screen. The first way, and primary way, is to *detach* from the screen by simply pressing **Control-A-D**. This will leave the detached screen running in the background. It can be accessed by running `screen -r`. If multiple screens are running, `screen -r` will prompt you to select one of them.
 
-The second way, is to *terminate* a screen. This should only be done if you are no longer running anything on the screen. To terminate a screen that you are currently on, simply press _Control-C_. This will irreversible end the given screen session and return you to the main command line.
+The second way, is to *terminate* a screen. This should only be done if you are no longer running anything on the screen. To terminate a screen that you are currently on, simply press **Control-C**. This will irreversible end the given screen session and return you to the main command line.
 
 ## About this code
 This code is based on the [TextSum code](https://github.com/tensorflow/models/tree/master/textsum) from Google Brain.
