@@ -113,13 +113,14 @@ Note: To use ordered data, simply replace `formatted_examples_uncased_unordered`
 ### Run (concurrent) eval
 You may want to run a concurrent evaluation job, that runs your model on the validation set and logs the loss. To do this, run:
 
+
+####### General Form
 ```
-# General Form
-
 python run_summarization.py --mode=eval --data_path=/path/to/chunked/val_* --vocab_path=/path/to/vocab --log_root=/path/to/a/log/directory --exp_name=myexperiment
+```
 
-# Using paths on the V100 instance as well as the Marketmuse word embeddings
-
+####### Using paths on the V100 instance as well as the Marketmuse word embeddings
+```
 python run_summarization.py --mode=eval --data_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/chunked/val_* --vocab_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/vocab --log_root=../logs/ --exp_name=myexperiment --vocab_size=50000 --emb_dim=300 --emb_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/cc_vec_50000_v2.pickle
 ```
 
