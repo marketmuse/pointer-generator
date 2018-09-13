@@ -94,14 +94,17 @@ To train your model, run:
 
 ```
 # General form
+
 python run_summarization.py --mode=train --data_path=/path/to/chunked/train_* --vocab_path=/path/to/vocab --log_root=/path/to/a/log/directory --exp_name=myexperiment
 
 # Using paths on the V100 instance as well as the Marketmuse word embeddings (change --exp_name from myexperiment to desired name)
-# Note: To use ordered data, simply replace formatted_examples_uncased_unordered data with formatted_examples_uncased_ordered in the data_path
+
 python run_summarization.py --mode=train --data_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/chunked/train_* --vocab_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/vocab --log_root=../logs/ --exp_name=myexperiment --vocab_size=50000 --emb_dim=300 --emb_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/cc_vec_50000_v2.pickle
 ```
 
 This will create a subdirectory of your specified `log_root` called `myexperiment` where all checkpoints and other data will be saved. Then the model will start training using the `train_*.bin` files as training data.
+
+Note: To use ordered data, simply replace `formatted_examples_uncased_unordered` data with `formatted_examples_uncased_ordered` in the data_path
 
 **Warning**: Using default settings as in the above command, both initializing the model and running training iterations will probably be quite slow. To make things faster, try setting the following flags (especially `max_enc_steps` and `max_dec_steps`) to something smaller than the defaults specified in `run_summarization.py`: `hidden_dim`, `emb_dim`, `batch_size`, `max_enc_steps`, `max_dec_steps`, `vocab_size`. 
 
@@ -112,10 +115,11 @@ You may want to run a concurrent evaluation job, that runs your model on the val
 
 ```
 # General Form
+
 python run_summarization.py --mode=eval --data_path=/path/to/chunked/val_* --vocab_path=/path/to/vocab --log_root=/path/to/a/log/directory --exp_name=myexperiment
 
-# Using paths on the V100 instance as well as the Marketmuse word embeddings (use same --exp_name from training)
-# Note: To use ordered data, simply replace formatted_examples_uncased_unordered data with formatted_examples_uncased_ordered in the data_path
+# Using paths on the V100 instance as well as the Marketmuse word embeddings
+
 python run_summarization.py --mode=eval --data_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/chunked/val_* --vocab_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/vocab --log_root=../logs/ --exp_name=myexperiment --vocab_size=50000 --emb_dim=300 --emb_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/cc_vec_50000_v2.pickle
 ```
 
@@ -128,10 +132,11 @@ To run beam search decoding:
 
 ```
 # General form
+
 python run_summarization.py --mode=decode --data_path=/path/to/chunked/val_* --vocab_path=/path/to/vocab --log_root=/path/to/a/log/directory --exp_name=myexperiment
 
-# Using paths on the V100 instance as well as the Marketmuse word embeddings (use same --exp_name from training)
-# Note: To use ordered data, simply replace formatted_examples_uncased_unordered data with formatted_examples_uncased_ordered in the data_path
+# Using paths on the V100 instance as well as the Marketmuse word embeddings
+
 python run_summarization.py --mode=decode --data_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/chunked/val_* --vocab_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/vocab --log_root=../logs/ --exp_name=myexperiment --vocab_size=50000 --emb_dim=300 --emb_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/cc_vec_50000_v2.pickle
 ```
 Note: you want to run the above command using the same settings you entered for your training job (plus any decode mode specific flags like `beam_size`).
