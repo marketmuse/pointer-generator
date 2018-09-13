@@ -44,6 +44,47 @@ cd paraphrasing/pointer-generator # move into the repo
 source activate tensorflow_p36 # activate the optimized tensorflow environment using python 3.6
 ```
 ## File structure
+The file structure for the `~/paraphrasing` directory is as follows:
+```
+.
++-- data
+|   +-- ensemble
+|   |   +-- formatted_examples_uncased_ordered
+|   |   |   +-- finished_files
+|   |   |   |   +-- chunked
+|   |   |   |   |   +-- train_000.bin
+|   |   |   |   |   +-- ...
+|   |   |   |   +-- test.bin
+|   |   |   |   +-- train.bin
+|   |   |   |   +-- val.bin
+|   |   |   |   +-- vocab
++-- logs
+|   +-- 09_10_2018-experiment_1
+|   |   +-- decode
+|   |   |   +-- attn_vis_data.json
+|   |   +-- eval
+|   |   |   +-- <bestmodel-checkpoints>
+|   |   +-- train
+|   |   |   +-- <model-checkpoints>
++-- pointer-generator
+|   +-- attention_decoder.py
+|   +-- batcher.py            
+|   +-- beam_search.py
+|   +-- clean_raw_data.py
+|   +-- data.py
+|   +-- decoded.txt
+|   +-- decode.py
+|   +-- envs
+|   |   +-- .aws
+|   +-- __init__.py   
+|   +-- inspect_checkpoint.py  
+|   +-- LICENSE.txt
+|   +-- model.py
+|   +-- run_summarization.py
+|   +-- make_paraphrase_data.py
+|   +-- README.md    
+|   +-- util.py
+```
 
 ## How to run
 See notes on using `screen` towards the end of the README.
