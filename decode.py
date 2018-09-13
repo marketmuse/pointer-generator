@@ -78,6 +78,7 @@ class BeamSearchDecoder(object):
   def decode(self):
     """Decode examples until data is exhausted (if FLAGS.single_pass) and return, or decode indefinitely, loading latest checkpoint at regular intervals"""
     t0 = time.time()
+    _ = util.load_ckpt(self._saver, self._sess)
     counter = 0
     while True:
       batch = self._batcher.next_batch()  # 1 example repeated across batch
