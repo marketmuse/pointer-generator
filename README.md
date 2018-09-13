@@ -1,4 +1,52 @@
-This repository contains code for the ACL 2017 paper *[Get To The Point: Summarization with Pointer-Generator Networks](https://arxiv.org/abs/1704.04368)*. 
+This repository contains code for the ACL 2017 paper *[Get To The Point: Summarization with Pointer-Generator Networks](https://arxiv.org/abs/1704.04368)*. This version has been modified to tackle the paraphrasing problem using our Ensemble Paraphrase dataset.
+
+## Accessing the Model
+Currently, the data and most recent models are located on the ec2 V100 instance and can be ssh'd into as follows:
+
+```
+ssh -i ~/path/to/rsa-private-key ubuntu@35.153.162.101
+```
+
+My private key is stored at `~/.ssh/mm_admin_ec2` and looks as follows:
+
+```
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpQIBAAKCAQEAyy+1Xnr02Kw4Hsr0H4IrM6MYcSsFArxuxUSCViWqFCCAX4Fr
+FIMCMH9S5s5b1XvdUBDdKx7sI2knarzYWnlSYgfmc49Mn3NL2q50bxWam1JL802j
+MyPY3tG/6GPBnXWt9HCdKwMYRiuWdfr5s/ZZWQdz2ajOIxXIMO3c56PWP3+ReckT
+Ee1gLiHXEeEpCUluhnNzvkYCcPQhOq1kpKX5o5w04Pd7YMJB/0+SaVTH1hj8ITzX
+/Ite/ATjQfghCnZEdcdrlsMFXWC5mdSoR1r/AaIxtXHg4V9RRZRzbdQuVOsZgEdW
+1nxKmymkyHDxLvgv3crzjfdR4p2GXvs3h9eAawIDAQABAoIBAQCripHTPHeu3mdb
+B/nnCBy1McMW+Dz4vGHAxkBLvuzCpVX8S+U9ogWdMEGrfxllOXf1eude2nJ+yu5u
+XRVD/R2iigz0D02faNXnwFWo21J2Q5q/xRI9wMv+ApPE/UOfTpUYxGLMx4Yc5/vV
+i5h5aUixs2sJnky6rk8fkBJqtpXRcL8RQ1BMOgvuoE7QFatbqsaS6yG61nHnZN7W
+8gdqoRs1tl5TBdDvcVUOA7ci9UqT+YykXYyu5xatcIcv3od/pdbx+pueUiHX+saZ
+ajzz8wc5OotUZX3xfJ6GOwxTybLNXQS1+NrHTKzqkfY0LtuXuOXL/MqtYX3ZoRFg
+twV4R7TBAoGBAOilNrYXWVCQBIux63EIN8Qs9Ptojzzz29PWXUBoLI6oUXoQ6w2j
+m7FSOAMBoGDByiWQ7JtUYh6v8OPZwkrlZKhy86B9u0qGl/kqr3UUiwKibiqSSSwV
+AUTcJNECbuIuFHD2L+/BT8c/qk4Tk1VqVKPp8wycols85Hq3VerbQq0bAoGBAN+V
+bHGwwHV6Ug03gEGsL3X3b3Bzb4P5YEQoWuuXksFCEw0D1LQwkbW9XZE+Uh0Gwpjx
+0UEuBjp0qv6ZpOj3OstYCUfleHADnWfBnlY2j2sSNvCvD1c0A5XlwCDwkE4qAQoT
+o3O0MJMOEZjXUi+cFmK+BZo4dpqPVY5FHwBo0j7xAoGBANBkldKcraulpfzAXic8
+9j8rCjNd4Nj3k9V48sUry6XqDjnqh7MK9/7pqDTBMzkYvgvSeq9U8iOM9JoVSJ4w
+R29AsQz1M1y5nc5bNxoIUdEFUOufaB4tnpphHDWBGXRPVI4vaJc6MU1IsTQJAvQD
+MFg3yzhj4mcZ74whR7v9tgc7AoGAGzCuyXy3SxIfHGBdhp8L/oqi0MgZDbGsFV3b
+AL+kJ0CD1JdcrLUjYziuQlWT4tfJnpP54LVaKI27pc7FkVdPnR8NseKkLOsjn1Sa
+jt1/v4OtjsObV/2JWhdgsCDRS9Ar5C/TNuT460lQtoepBQU0a7m0MLchJVa9Dto1
+FPWqa+ECgYEAkftvanZUhK0DwKJzaD5kTcJyeP6fSx4eDHd24928CteLHLMzucaz
+ZeUE/7qodeZkuSYvGEZDwvyBC8le4xgR2EvrBwskTjbxHEu4uf7BB2N9T8opxRgM
+SEPo8upWuYchTJ/SCd6sT2/6CSJlnSttZbxTJ2fxrk3gzPM8V7GH+BY=
+-----END RSA PRIVATE KEY-----
+```
+Once on the instance, move to the repo with `cd paraphrasing/pointer-generator`.
+
+## Screen versus running in background
+For whatever reason, I noticed that running in background produces weird stopping behavior. If the connection to the server breaks, for instance, often the training will also break. It's possible the behavior I noticed was do to something else and feel free to run in background with `&` but my recommendation is to use `screen`.
+
+### Starting a screen
+To start a screen simply run `screen`.
+
+From here you must reactivate
 
 ## Looking for test set output?
 The test set output of the models described in the paper can be found [here](https://drive.google.com/file/d/0B7pQmm-OfDv7MEtMVU5sOHc5LTg/view?usp=sharing).
