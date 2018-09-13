@@ -40,8 +40,8 @@ SEPo8upWuYchTJ/SCd6sT2/6CSJlnSttZbxTJ2fxrk3gzPM8V7GH+BY=
 ```
 Once on the instance, run the following:
 ```
-cd paraphrasing/pointer-generator # move into the repo
-source activate tensorflow_p36 # activate the optimized tensorflow environment using python 3.6
+$ cd paraphrasing/pointer-generator  # move into the repo
+$ source activate tensorflow_p36     # activate the optimized tensorflow environment using python 3.6
 ```
 ## File structure
 The file structure for the `~/paraphrasing` directory is as follows:
@@ -92,14 +92,25 @@ See notes on using `screen` towards the end of the README.
 ### Training the model
 To train your model, run:
 
+###### General form
 ```
-# General form
-
-python run_summarization.py --mode=train --data_path=/path/to/chunked/train_* --vocab_path=/path/to/vocab --log_root=/path/to/a/log/directory --exp_name=myexperiment
-
-# Using paths on the V100 instance as well as the Marketmuse word embeddings (change --exp_name from myexperiment to desired name)
-
-python run_summarization.py --mode=train --data_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/chunked/train_* --vocab_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/vocab --log_root=../logs/ --exp_name=myexperiment --vocab_size=50000 --emb_dim=300 --emb_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/cc_vec_50000_v2.pickle
+python run_summarization.py \
+      --mode=train \
+      --data_path=/path/to/chunked/train_* \
+      --vocab_path=/path/to/vocab \
+      --log_root=/path/to/a/log/directory \
+      --exp_name=myexperiment
+```
+###### Using paths on the V100 instance as well as the Marketmuse word embeddings (change --exp_name from myexperiment to desired name)
+```
+python run_summarization.py \
+      --mode=train \
+      --data_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/chunked/train_* \
+      --vocab_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/vocab \
+      --log_root=../logs/ \
+      --exp_name=myexperiment \
+      --vocab_size=50000 --emb_dim=300 \
+      --emb_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/cc_vec_50000_v2.pickle
 ```
 
 This will create a subdirectory of your specified `log_root` called `myexperiment` where all checkpoints and other data will be saved. Then the model will start training using the `train_*.bin` files as training data.
@@ -143,18 +154,17 @@ Note: you want to run the above command using the same settings you entered for 
 ### Run beam search decoding
 To run beam search decoding:
 
+###### General form
 ```
-# General form
-
 python run_summarization.py \
       --mode=decode \
       --data_path=/path/to/chunked/val_* \
       --vocab_path=/path/to/vocab \
       --log_root=/path/to/a/log/directory \
       --exp_name=myexperiment
-
-# Using paths on the V100 instance as well as the Marketmuse word embeddings
-
+```
+###### Using paths on the V100 instance as well as the Marketmuse word embeddings
+```
 python run_summarization.py \
       --mode=decode \
       --data_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/chunked/val_* \
