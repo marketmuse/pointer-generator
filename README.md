@@ -3,7 +3,7 @@ This repository contains code for the ACL 2017 paper *[Get To The Point: Summari
 ## Accessing the Model
 Currently, the data and most recent models are located on the ec2 V100 instance and can be ssh'd into as follows:
 
-```
+```bash
 ssh -i ~/path/to/rsa-private-key ubuntu@35.153.162.101
 ```
 
@@ -39,9 +39,9 @@ SEPo8upWuYchTJ/SCd6sT2/6CSJlnSttZbxTJ2fxrk3gzPM8V7GH+BY=
 -----END RSA PRIVATE KEY-----
 ```
 Once on the instance, run the following:
-```
-$ cd paraphrasing/pointer-generator  # move into the repo
-$ source activate tensorflow_p36     # activate the optimized tensorflow environment using python 3.6
+```bash
+cd paraphrasing/pointer-generator  # move into the repo
+source activate tensorflow_p36     # activate the optimized tensorflow environment using python 3.6
 ```
 ## File structure
 The file structure for the `~/paraphrasing` directory is as follows:
@@ -93,7 +93,7 @@ See notes on using `screen` towards the end of the README.
 To train your model, run:
 
 ###### General form
-```
+```bash
 python run_summarization.py \
       --mode=train \
       --data_path=/path/to/chunked/train_* \
@@ -103,7 +103,7 @@ python run_summarization.py \
 ```
 ###### Using paths on the V100 instance as well as the Marketmuse word embeddings 
 Note: change `--exp_name=myexperiment` to desired experiment name
-```
+```bash
 python run_summarization.py \
       --mode=train \
       --data_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/chunked/train_* \
@@ -127,7 +127,7 @@ You may want to run a concurrent evaluation job, that runs your model on the val
 
 
 ###### General Form
-```
+```bash
 python run_summarization.py \ 
       --mode=eval \
       --data_path=/path/to/chunked/val_* \
@@ -137,7 +137,7 @@ python run_summarization.py \
 ```
 
 ###### Using paths on the V100 instance as well as the Marketmuse word embeddings
-```
+```bash
 python run_summarization.py \
       --mode=eval \
       --data_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/chunked/val_* \
@@ -156,7 +156,7 @@ Note: you want to run the above command using the same settings you entered for 
 To run beam search decoding:
 
 ###### General form
-```
+```bash
 python run_summarization.py \
       --mode=decode \
       --data_path=/path/to/chunked/val_* \
@@ -165,7 +165,7 @@ python run_summarization.py \
       --exp_name=myexperiment
 ```
 ###### Using paths on the V100 instance as well as the Marketmuse word embeddings
-```
+```bash
 python run_summarization.py \
       --mode=decode \
       --data_path=../data/ensemble/formatted_examples_uncased_unordered/finished_files/chunked/val_* \
